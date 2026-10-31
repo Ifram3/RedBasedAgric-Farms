@@ -9,6 +9,7 @@ from models.product import ProductVariant
 from utils.cart import add_item, build_display_lines, get_cart_lines, get_totals, remove_item, update_item_qty
 from utils.formatting import format_naira
 from utils.templates import templates
+from utils.whatsapp import whatsapp_order_url
 
 router = APIRouter()
 
@@ -29,6 +30,7 @@ def _cart_context(request: Request, db: Session) -> dict:
         "subtotal_display": format_naira(totals["subtotal"]),
         "total_display": format_naira(totals["total"]),
         "qualifies_free_shipping": qualifies_free_shipping,
+        "whatsapp_order_url": whatsapp_order_url(lines),
     }
 
 

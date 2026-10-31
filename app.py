@@ -10,7 +10,11 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.staticfiles import StaticFiles
 
 from database import init_db
-from routers import admin, cart, checkout, contact, pages, payment, shop
+from routers import cart, contact, pages, shop
+
+# Paystack is switched off: orders are placed on WhatsApp from the cart page.
+# To bring online checkout back, restore these and the include_router calls below.
+# from routers import admin, checkout, payment
 
 SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
 if not SESSION_SECRET_KEY:
@@ -31,8 +35,8 @@ app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), na
 
 app.include_router(shop.router)
 app.include_router(cart.router)
-app.include_router(checkout.router)
-app.include_router(payment.router)
+# app.include_router(checkout.router)
+# app.include_router(payment.router)
 app.include_router(pages.router)
 app.include_router(contact.router)
-app.include_router(admin.router)
+# app.include_router(admin.router)
