@@ -120,10 +120,12 @@
       <div class="col-6 col-lg-3">
         <div class="feature-card">
           <div class="feature-icon feature-icon--payments">
-            <i class="bi bi-shield-check"></i>
+            <i class="bi bi-whatsapp"></i>
           </div>
-          <div class="feature-title">Secure Payments</div>
-          <p class="feature-text">SSL-encrypted checkout with Paystack, Flutterwave &amp; bank transfer</p>
+          <!-- <div class="feature-title">Secure Payments</div> -->
+          <!-- <p class="feature-text">SSL-encrypted checkout with Paystack, Flutterwave &amp; bank transfer</p> -->
+          <div class="feature-title">Order on WhatsApp</div>
+          <p class="feature-text">Send us your cart on WhatsApp and we'll confirm your order directly</p>
         </div>
       </div>
  
@@ -148,158 +150,40 @@
 
     <div class="row g-4">
 
-      <!-- Card 1 -->
+      {% for product in featured_products %}
       <div class="col-sm-6 col-lg-4">
         <div class="product-card">
-          <div class="product-media product-media--mint">
-            <span class="product-tag">Best Seller</span>
+          <div class="product-media {{ loop.cycle('product-media--mint', 'product-media--lavender', 'product-media--blush', 'product-media--sand', 'product-media--sage', 'product-media--tan') }}">
+            {% if product.badge %}
+            <span class="product-tag">{{ product.badge }}</span>
+            {% endif %}
             <button class="product-wishlist" aria-label="Add to wishlist">
               <i class="bi bi-heart"></i>
             </button>
-            <img src="{{url_for('static', path='images/Single_500ml_5k_$12.png')}}" alt="Red Based Red Palm Oil (500ml)">
+            <a href="/product/{{ product.slug }}" class="product-media-link">
+              <img src="{{ url_for('static', path=product.image) }}" alt="{{ product.name }}">
+            </a>
           </div>
           <div class="product-body">
-            <div class="product-category">PALM OIL</div>
-            <div class="product-name">Red Based Palm Oil (500ML)</div>
+            <div class="product-category">{{ product.category|upper }}</div>
+            <div class="product-name"><a href="/product/{{ product.slug }}" class="product-name-link">{{ product.name }}</a></div>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="count">(218)</span>
+              <span class="count">({{ product.rating_count }})</span>
             </div>
+            {% if product.in_stock %}
             <span class="product-stock"><span class="dot"></span>In Stock</span>
+            {% else %}
+            <span class="product-stock product-stock-out">Out of Stock</span>
+            {% endif %}
             <div class="product-footer">
-              <span class="product-price">₦5,000</span>
-              <button class="product-add"><i class="bi bi-cart3"></i> Add</button>
+              <!-- <span class="product-price">{{ product.price_display }}</span> -->
+              <a href="/product/{{ product.slug }}" class="product-add"><i class="bi bi-eye"></i> View</a>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Card 2 -->
-      <div class="col-sm-6 col-lg-4">
-        <div class="product-card">
-          <div class="product-media product-media--lavender">
-            <button class="product-wishlist" aria-label="Add to wishlist">
-              <i class="bi bi-heart"></i>
-            </button>
-            <img src="{{url_for('static', path='images/Single_5L_20k.png')}}" alt="Red Based Palm Oil (5L)">
-          </div>
-          <div class="product-body">
-            <div class="product-category">PALM OIL</div>
-            <div class="product-name">Red Based Palm Oil (5L)</div>
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="count">(218)</span>
-            </div>
-            <span class="product-stock"><span class="dot"></span>In Stock</span>
-            <div class="product-footer">
-              <span class="product-price">₦20,000</span>
-              <button class="product-add"><i class="bi bi-cart3"></i> Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="col-sm-6 col-lg-4">
-        <div class="product-card">
-          <div class="product-media product-media--blush">
-            <span class="product-tag">New</span>
-            <button class="product-wishlist" aria-label="Add to wishlist">
-              <i class="bi bi-heart"></i>
-            </button>
-            <img src="{{url_for('static', path='images/Single_400ml_4.3k_$10.png')}}" alt="Red Based Palm Oil (400ML)">
-          </div>
-          <div class="product-body">
-            <div class="product-category">PALM OIL</div>
-            <div class="product-name">Red Based Palm Oil (400ML)</div>
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="count">(218)</span>
-            </div>
-            <span class="product-stock"><span class="dot"></span>In Stock</span>
-            <div class="product-footer">
-              <span class="product-price">₦4,300</span>
-              <button class="product-add"><i class="bi bi-cart3"></i> Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="col-sm-6 col-lg-4">
-        <div class="product-card">
-          <div class="product-media product-media--sand">
-            <button class="product-wishlist" aria-label="Add to wishlist">
-              <i class="bi bi-heart"></i>
-            </button>
-            <img src="{{url_for('static', path='images/Single_25L_90k.png')}}" alt="Red Based Palm Oil (25L)">
-          </div>
-          <div class="product-body">
-            <div class="product-category">PALM OIL</div>
-            <div class="product-name">Red Based Palm Oil (25L)</div>
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="count">(218)</span>
-            </div>
-            <span class="product-stock"><span class="dot"></span>In Stock</span>
-            <div class="product-footer">
-              <span class="product-price">₦90,000</span>
-              <button class="product-add"><i class="bi bi-cart3"></i> Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 5 -->
-      <div class="col-sm-6 col-lg-4">
-        <div class="product-card">
-          <div class="product-media product-media--sage">
-            <span class="product-tag">Popular</span>
-            <button class="product-wishlist" aria-label="Add to wishlist">
-              <i class="bi bi-heart"></i>
-            </button>
-            <img src="{{url_for('static', path='images/Single_2.5L_12.5k_$25.png')}}" alt="Red Based Palm Oil (2.5L)">
-          </div>
-          <div class="product-body">
-            <div class="product-category">PALM OIL</div>
-            <div class="product-name">Red Based Palm Oil (2.5L)</div>
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="count">(218)</span>
-            </div>
-            <span class="product-stock"><span class="dot"></span>In Stock</span>
-            <div class="product-footer">
-              <span class="product-price">₦12,500</span>
-              <button class="product-add"><i class="bi bi-cart3"></i> Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 6 -->
-      <div class="col-sm-6 col-lg-4">
-        <div class="product-card">
-          <div class="product-media product-media--tan">
-            <button class="product-wishlist" aria-label="Add to wishlist">
-              <i class="bi bi-heart"></i>
-            </button>
-            <img src="{{url_for('static', path='images/Single_4L_15k.png')}}" alt="Red Based Palm Oil (4L)">
-          </div>
-          <div class="product-body">
-            <div class="product-category">PALM OIL</div>
-            <div class="product-name">Red Based Palm Oil (4L)</div>
-            <div class="product-rating">
-              <span class="stars">★★★★★</span>
-              <span class="count">(218)</span>
-            </div>
-            <span class="product-stock"><span class="dot"></span>In Stock</span>
-            <div class="product-footer">
-              <span class="product-price">₦15,000</span>
-              <button class="product-add"><i class="bi bi-cart3"></i> Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
 
     </div>
   </div>
@@ -328,57 +212,21 @@
 
     <div class="bs-track" id="bsTrack">
 
-      <!-- Card 1 -->
+      {% for product in bestseller_products %}
       <article class="bs-card">
         <div class="bs-card-media">
-          <img src="{{url_for('static', path='images/Single_400ml_4.3k_$10_(1).jpg')}}" alt="Red Based Palm Oil 400ML" class="img-fluid">
+          <a href="/product/{{ product.slug }}" class="bs-media-link">
+            <img src="{{ url_for('static', path=product.image) }}" alt="{{ product.name }}" class="img-fluid">
+          </a>
         </div>
         <div class="bs-card-body">
           <div class="bs-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-          <div class="bs-name">Red Based Palm Oil (400ML)</div>
-          <div class="bs-price">₦4,300</div>
-          <button class="bs-add"><i class="bi bi-cart3"></i> Add to Cart</button>
+          <div class="bs-name"><a href="/product/{{ product.slug }}" class="product-name-link">{{ product.name }}</a></div>
+          <!-- <div class="bs-price">{{ product.price_display }}</div> -->
+          <a href="/product/{{ product.slug }}" class="bs-add"><i class="bi bi-eye"></i> View</a>
         </div>
       </article>
-
-      <!-- Card 2 -->
-      <article class="bs-card">
-        <div class="bs-card-media">
-          <img src="{{url_for('static', path='images/Single_5L_20k_(1).jpg')}}" alt="5L Red Based Palm Oil" class="img-fluid">
-        </div>
-        <div class="bs-card-body">
-          <div class="bs-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-          <div class="bs-name">Red Based Palm Oil (5L)</div>
-          <div class="bs-price">₦20,000</div>
-          <button class="bs-add"><i class="bi bi-cart3"></i> Add to Cart</button>
-        </div>
-      </article>
-
-      <!-- Card 3 -->
-      <article class="bs-card">
-        <div class="bs-card-media">
-          <img src="{{url_for('static', path='images/Single_4L_15k_(1).jpg')}}" alt="Red Based Palm Oil 4L Gallon">
-        </div>
-        <div class="bs-card-body">
-          <div class="bs-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-          <div class="bs-name">Red  Based Palm Oil (4L)</div>
-          <div class="bs-price">₦15,000</div>
-          <button class="bs-add"><i class="bi bi-cart3"></i> Add to Cart</button>
-        </div>
-      </article>
-
-      <!-- Card 4 -->
-      <article class="bs-card">
-        <div class="bs-card-media">
-          <img src="{{url_for('static', path='images/Single_500ml_5k_$12_(1).jpg')}}" alt="Red Based Palm Oil">
-        </div>
-        <div class="bs-card-body">
-          <div class="bs-stars"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-          <div class="bs-name">Red Based Palm Oil (500ML)</div>
-          <div class="bs-price">₦5,000</div>
-          <button class="bs-add"><i class="bi bi-cart3"></i> Add to Cart</button>
-        </div>
-      </article>
+      {% endfor %}
 
     </div>
 
@@ -415,10 +263,12 @@
         <div class="hiw-step">
           <span class="hiw-number">2</span>
           <div class="hiw-icon">
-            <i class="bi bi-shield-check"></i>
+            <i class="bi bi-whatsapp"></i>
           </div>
-          <div class="hiw-title">Secure Checkout</div>
-          <p class="hiw-text">Pay safely with Paystack, bank transfer, or USSD</p>
+          <!-- <div class="hiw-title">Secure Checkout</div> -->
+          <!-- <p class="hiw-text">Pay safely with Paystack, bank transfer, or USSD</p> -->
+          <div class="hiw-title">Order on WhatsApp</div>
+          <p class="hiw-text">Send your cart to us on WhatsApp and we'll confirm price, delivery and payment</p>
         </div>
       </div>
 

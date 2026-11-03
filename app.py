@@ -1,80 +1,42 @@
-from fastapi import FastAPI, Request
-from fastapi.templating import Jinja2Templates
-from starlette.staticfiles import StaticFiles
 import os
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+from dotenv import load_dotenv
+
+load_dotenv()
+
+from fastapi import FastAPI
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.staticfiles import StaticFiles
+
+from database import init_db
+from routers import cart, contact, pages, shop
+
+# Paystack is switched off: orders are placed on WhatsApp from the cart page.
+# To bring online checkout back, restore these and the include_router calls below.
+# from routers import admin, checkout, payment
+
+SESSION_SECRET_KEY = os.getenv("SESSION_SECRET_KEY")
+if not SESSION_SECRET_KEY:
+    raise RuntimeError("SESSION_SECRET_KEY environment variable must be set")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET_KEY)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
-@app.get("/")
-async def index(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html"
-    )
-
-@app.get("/about_us")
-async def about_us(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="about.html"
-    ) 
-
-@app.get("/shop")
-async def shop(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="shop.html"
-    )
-
-@app.get("/product")
-async def shop(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="product.html"
-    )
-
-@app.get("/cart")
-async def cart(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="cart.html"
-    )
-
-@app.get("/checkout")
-async def cart(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="checkout.html"
-    )
-
-@app.get("/delivery")
-async def cart(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="delivery.html"
-    )
-
-@app.get("/payment")
-async def cart(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="payment.html"
-    )
-
-@app.get("/order_confirmation")
-async def order_confirmation(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="order_confirmation.html"
-    )
-
-@app.get("/contact")
-async def contact_us(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="contact.html"
-    )
+app.include_router(shop.router)
+app.include_router(cart.router)
+# app.include_router(checkout.router)
+# app.include_router(payment.router)
+app.include_router(pages.router)
+app.include_router(contact.router)
+# app.include_router(admin.router)
